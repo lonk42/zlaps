@@ -27,7 +27,10 @@ class zlaps():
 		self.window.after(10, self.update_stopwatch)
 
 	def ui_scheduler(self):
-		self.ui.scheduler()
+		try:
+			self.ui.current_tab.scheduler()
+		except:
+			pass
 		self.window.after(200, self.ui_scheduler)
 
 # Launch Application

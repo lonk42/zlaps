@@ -1,11 +1,11 @@
 import tkinter as tk
 import tkinter.font
 from datetime import datetime
-from functools import partial
 
 # zlaps libraries
 from lib.stopwatch import StopWatch
 from lib.session import Session
+from lib.tabs.timing import TimingTab
 
 class UI():
 
@@ -21,9 +21,9 @@ class UI():
 		self.current_tab = ''
 
 		# Fonts
-		self.spilt_font = tk.font.Font(family = 'Helvetica', name = 'split_font', size = 18)
-		self.session_font = tk.font.Font(family = 'Helvetica', name = 'session_font', size = 24)
 		self.title_font = tk.font.Font(family = 'Helvetica', name = 'title_font', size = 24)
+		self.split_font = tk.font.Font(family = 'Helvetica', name = 'split_font', size = 18)
+		self.session_font = tk.font.Font(family = 'Helvetica', name = 'session_font', size = 24)
 
 		# Title
 		title = tk.Label(text = 'Zlaps 0.1', font = 'title_font')
@@ -64,95 +64,17 @@ class UI():
 
 		self.frame_tab_content = tk.Frame()
 
-	def scheduler(self):
-		if self.current_tab == 'timing':
-			self.save_splits()
-
 	def clear_tab_content(self):
 		self.frame_tab_content.destroy()
 		self.frame_tab_content = tk.Frame(master = self.window, relief = tk.RIDGE, borderwidth = 3)
 		self.frame_tab_content.pack(fill = tk.BOTH, expand = True)
 
-	##### Timing Tab
-
 	def set_timing_tab(self):
-		self.current_tab = 'timing'
-		self.clear_tab_content()
-
 		if len(self.sessions) < 0:
 			return
 
-		# Container
-		frame_title = tk.Frame(master = self.frame_tab_content)
-		frame_title.pack()
-
-		# Heading
-		self.label_session_title = tk.Label(master = frame_title, text = self.sessions[-1].session_name, font = 'session_font')
-		self.label_session_title.pack()
-
-		# Splits
-		self.frame_splits = None
-		#self.frame_splits = tk.Frame(master = self.frame_tab_content, relief = tk.RIDGE, borderwidth = 3)
-		#self.frame_splits.pack(side = tk.LEFT, fill = tk.Y)
-
-		self.draw_splits()
-
-	def save_splits(self):
-
-		# Read off any existing car numbers
-		for split in self.sessions[-1].splits:
-			if split.car_number_form is not None:
-				try:
-					split.car_number = split.car_number_form.get()
-				except:
-					pass
-
-	def draw_splits(self):
-
-		# Clear splits
-		self.save_splits()
-		try:
-			self.frame_splits.destroy()
-			self.canvas_splits.destroy()
-			self.scroll_y_splits.destroy()
-		except:
-			pass
-
-		# Create canvas and frames
-		self.canvas_splits = tk.Canvas(self.frame_tab_content)
-		self.scroll_y_splits = tk.Scrollbar(self.frame_tab_content, orient="vertical", command=self.canvas_splits.yview)
-		self.frame_splits = tk.Frame(self.canvas_splits)
-
-		# Populate splits
-		for split in self.sessions[-1].splits:
-			split_frame = tk.Frame(master = self.frame_splits, relief = tk.GROOVE, borderwidth = 3)
-			split_frame.pack(side = tk.TOP)
-
-			split_button_delete = tk.Button(
-				master = split_frame, text = 'X', width = 1, height = 1, 
-				command = partial(self.sessions[-1].remove_split, split)
-			)
-			split_button_delete.pack(side = tk.LEFT)
-
-			split_label = tk.Label(master = split_frame, text = self.format_time_string(split.split_time) + ' ', font = 'split_font')
-			split_label.pack(side = tk.LEFT)
-
-			split_entry_car_number = tk.Entry(master = split_frame, width = 5, font = 'split_font')
-			split_entry_car_number.insert(0, split.car_number)
-			split.car_number_form = split_entry_car_number
-			split_entry_car_number.pack()
-
-		add_split_button = tk.Button(text = 'Add Split', master = self.frame_splits, width = 25, height = 4, command = self.sessions[-1].add_split)
-		add_split_button.pack(side = tk.TOP)
-
-		# Populate everything
-		self.canvas_splits.create_window(0, 0, anchor='nw', window=self.frame_splits)
-		self.canvas_splits.update_idletasks()
-
-		self.canvas_splits.configure(scrollregion=self.canvas_splits.bbox('all'), yscrollcommand=self.scroll_y_splits.set)
-
-		self.canvas_splits.pack(fill='both', expand=True, side='left')
-		self.scroll_y_splits.pack(fill='y', side='right')
+		self.clear_tab_content()
+		self.current_tab = TimingTab(self)
 
 	def set_cars_tab(self):
 		self.current_tab = 'cars'

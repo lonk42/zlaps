@@ -12,11 +12,19 @@ class Session():
 
 	def add_split(self):
 		self.splits.append(self.Split(self.stopwatch.get_duration()))
-		self.ui.draw_splits()
+		self.ui.current_tab.draw_splits()
 
 	def remove_split(self, split):
 		self.splits.remove(split)
-		self.ui.draw_splits()
+		self.ui.current_tab.draw_splits()
+
+	def generate_split_dict(self):
+
+		# First make a list of unqiue cars
+		car_numbers = []
+		for split in self.splits:
+			if split.car_number != '' and split.car_number not in car_numbers:
+				car_numbers.append(split.car_number)
 
 	class Split():
 
