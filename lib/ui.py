@@ -123,7 +123,7 @@ class UI():
 		self.label_clock['text'] = self.format_time_string(time)
 
 	def update_sensor(self, distance):
-		self.label_sensor['text'] = str(distance)
+		self.label_sensor['text'] = str(distance/100) + "m"
 
 	def format_time_string(self, time_string):
 		return datetime.strftime(datetime.utcfromtimestamp(time_string), "%M:%S:%f")[:-4]

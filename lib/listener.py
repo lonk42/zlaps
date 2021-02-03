@@ -57,8 +57,16 @@ class Listener():
 			# 0x10 is a distance measurement
 			if payload[0] == 0x10:
 				distance = int.from_bytes(payload[1:], "big")
-				print('Distance recieved: ' + str(distance))
+				#print('Distance recieved: ' + str(distance))
 				self.ui.update_sensor(distance)
+
+			# 0x20 is a trigger ping
+			elif payload[0] == 0x20:
+				try:
+					self.ui.sessions[-1].add_split()
+				except Exception as e:
+					print(e)
+
 			else:
 				print('ERROR: Unknown mode ' + str(payload[0]))
 

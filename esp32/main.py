@@ -16,8 +16,11 @@ class LapTimer():
 		self.distance = 0
 		self.strength = 0
 		self.subscriber_ip = None
-
 		loop = asyncio.get_event_loop()
+
+		# Setings
+		self.trigger_distance = 140
+		self.trigger_lockout = False
 
 		# Sockets
 		network_station = network.WLAN(network.STA_IF)
@@ -43,10 +46,11 @@ class LapTimer():
 			await asyncio.sleep_ms(200)
 
 			if self.subscriber_ip is not None:
+				#print("Sending distance: " + str(self.distance))
 				try:
 					s = usocket.socket(usocket.AF_INET, usocket.SOCK_DGRAM)
 					s.connect(usocket.getaddrinfo(self.subscriber_ip, 3500)[0][-1])
-					s.send(bytearray([0x35, 0x35, 0x02, 0x10, self.distance]))
+					s.send(bytearray([0x35, 0x35, 0x03, 0x10]) + bytearray(self.distance.to_bytes(2, 'big')))
 					s.close()
 				except Exception as e:
 					print(e)
@@ -106,7 +110,7 @@ class LapTimer():
 
 				# VALID DATA
 				payload = data_buffer[3:(3 + payload_size)]
-				print('Valid Data: ' + str(binascii.hexlify(payload)))
+				#print('Valid Data: ' + str(binascii.hexlify(payload)))
 
 				# First byte is the mode selector
 
@@ -127,7 +131,7 @@ class LapTimer():
 
 	def check_sensor(self):
 		while True:
-			await asyncio.sleep_ms(10)
+			await asyncio.sleep_ms(1)
 
 			data = self.uart.read(9)
 			if data:
@@ -152,9 +156,33 @@ class LapTimer():
 				if checksum == data[8]:
 					self.distance = data[2] + (data[3] * 256)
 					self.strength = data[4] + (data[5] * 256)
-
 #				print(str(self.distance) + ', ' + str(self.strength))
 
+				# Send a ping if needed
+				self.check_trigger()
+
+	def check_trigger(self):
+
+		# Reset the lock if nothing is there
+		if self.distance > self.trigger_distance:
+			self.trigger_lockout = False
+
+		# If its lower trigger a ping
+		if self.distance < self.trigger_distance:
+
+			# Only send if we have a subscriber
+			if self.subscriber_ip is not None and not self.trigger_lockout:
+				print("PING: " + str(self.distance))
+				try:
+					s = usocket.socket(usocket.AF_INET, usocket.SOCK_DGRAM)
+					s.connect(usocket.getaddrinfo(self.subscriber_ip, 3500)[0][-1])
+					s.send(bytearray([0x35, 0x35, 0x01, 0x20]))
+					s.close()
+				except Exception as e:
+					print(e)
+
+			# Lock out the trigger
+			self.trigger_lockout = True
 
 
 # LESH GO

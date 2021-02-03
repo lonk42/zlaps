@@ -70,6 +70,7 @@ class TimingTab():
 			split.car_number_form = split_entry_car_number
 			split_entry_car_number.pack()
 
+		# Manual button
 		add_split_button = tk.Button(text = 'Add Split', master = self.frame_splits, width = 25, height = 4, command = self.ui.sessions[-1].add_split)
 		add_split_button.pack(side = tk.TOP)
 
