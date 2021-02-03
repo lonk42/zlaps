@@ -19,10 +19,13 @@ class UI():
 		self.sessions = sessions
 		self.session_count = 0
 		self.current_tab = ''
+		self.sensor_ip = '10.1.1.145'
 
 		# Fonts
 		self.title_font = tk.font.Font(family = 'Helvetica', name = 'title_font', size = 24)
 		self.split_font = tk.font.Font(family = 'Helvetica', name = 'split_font', size = 18)
+		self.sensor_font = tk.font.Font(family = 'Helvetica', name = 'sensor_font', size = 20)
+		self.sensor_ip_font = tk.font.Font(family = 'Helvetica', name = 'sensor_ip_font', size = 10)
 		self.session_font = tk.font.Font(family = 'Helvetica', name = 'session_font', size = 24)
 
 		# Title
@@ -46,6 +49,18 @@ class UI():
 		self.button_toggle_session = tk.Button(text = 'Start Session', master = frame_controls, width = 8, bg = 'green', command = self.toggle_session)
 		self.button_toggle_session.pack(fill = tk.Y, expand = True)
 
+		# Sensor Frame
+		frame_sensor = tk.Frame(master = frame_top_bar, relief = tk.RIDGE, borderwidth = 3)
+		frame_sensor.pack(fill = tk.Y, side = tk.LEFT)
+
+		self.entry_sensor_ip = tk.Entry(master = frame_sensor, width = 10, font = self.sensor_ip_font)
+		self.entry_sensor_ip.insert(0, self.sensor_ip)
+		self.entry_sensor_ip.pack()
+
+		self.label_sensor = tk.Label(master = frame_sensor, text = 'Not Found', font = self.sensor_font)
+		self.label_sensor.pack(side = tk.LEFT)
+
+
 		# Tab bar
 		tab_names = [
 			('Timing', self.set_timing_tab),
@@ -53,7 +68,7 @@ class UI():
 			('Results', self.set_results_tab),
 			('Settings', self.set_settings_tab)
 		]
-		tab_bar_button_presets = {'width': 20, 'height': 3}
+		tab_bar_button_presets = {'width': 10, 'height': 3}
 		frame_tab_bar = tk.Frame(master = frame_top_bar)
 		frame_tab_bar.pack(side = tk.RIGHT, fill = tk.Y)
 
@@ -106,6 +121,9 @@ class UI():
 
 	def update_timer(self, time):
 		self.label_clock['text'] = self.format_time_string(time)
+
+	def update_sensor(self, distance):
+		self.label_sensor['text'] = str(distance)
 
 	def format_time_string(self, time_string):
 		return datetime.strftime(datetime.utcfromtimestamp(time_string), "%M:%S:%f")[:-4]

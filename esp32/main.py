@@ -28,6 +28,7 @@ class LapTimer():
 		self.listening_socket.settimeout(0)
 
 		# Setup scheduled jobs
+		loop.create_task(self.send_distance())
 		loop.create_task(self.check_sensor())
 		loop.create_task(self.check_socket())
 
@@ -36,6 +37,19 @@ class LapTimer():
 			loop.run_forever()
 		finally:
 			loop.close()
+
+	def send_distance(self):
+		while True:
+			await asyncio.sleep_ms(200)
+
+			if self.subscriber_ip is not None:
+				try:
+					s = usocket.socket(usocket.AF_INET, usocket.SOCK_DGRAM)
+					s.connect(usocket.getaddrinfo(self.subscriber_ip, 3500)[0][-1])
+					s.send(bytearray([0x35, 0x35, 0x02, 0x10, self.distance]))
+					s.close()
+				except Exception as e:
+					print(e)
 
 	def check_socket(self):
 		while True:
@@ -104,7 +118,7 @@ class LapTimer():
 					print('Registering subscriber: ' + ip_string)
 					self.subscriber_ip = ip_string
 				else:
-					print('ERROR: Unknown mode ' + str(payload[2]))
+					print('ERROR: Unknown mode ' + str(payload[0]))
 
 				# Extra data is moved on for another cycle
 				data_buffer = data_buffer[(3 + payload_size):]
