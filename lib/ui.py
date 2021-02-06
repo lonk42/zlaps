@@ -6,6 +6,7 @@ from datetime import datetime
 from lib.stopwatch import StopWatch
 from lib.session import Session
 from lib.tabs.timing import TimingTab
+from lib.file_handler import FileHandler
 
 class UI():
 
@@ -106,8 +107,12 @@ class UI():
 	def toggle_session(self):
 		self.session_started = not self.session_started
 
+		# End session
 		if self.session_started:
 			self.button_toggle_session.configure(text = 'Start Session', bg = 'green')
+			FileHandler().save_session(self.sessions[-1])
+
+		# Start new session
 		else:
 			self.button_toggle_session.configure(text = 'Stop Session', bg = 'red')
 			self.create_session()

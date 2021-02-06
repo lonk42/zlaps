@@ -11,8 +11,9 @@ class TimingTab():
 		frame_title.pack()
 
 		# Heading
-		self.label_session_title = tk.Label(master = frame_title, text = self.ui.sessions[-1].session_name, font = self.ui.session_font)
-		self.label_session_title.pack()
+		self.entry_session_title = tk.Entry(master = frame_title, width = 16, font = self.ui.session_font)
+		self.entry_session_title.insert(0, self.ui.sessions[-1].session_name)
+		self.entry_session_title.pack()
 
 		# Splits
 		self.frame_splits = None
@@ -20,6 +21,8 @@ class TimingTab():
 		self.draw_times()
 
 	def scheduler(self):
+		self.ui.sessions[-1].session_name = self.entry_session_title.get()
+		self.ui.sessions[-1].calculate_laps()
 		self.save_splits()
 
 	def save_splits(self):
@@ -54,7 +57,7 @@ class TimingTab():
 		# Populate splits
 		for split in self.ui.sessions[-1].splits:
 			split_frame = tk.Frame(master = self.frame_splits, relief = tk.GROOVE, borderwidth = 3)
-			split_frame.pack(side = tk.TOP)
+			split_frame.pack(side = tk.TOP, fill = tk.X)
 
 			split_button_delete = tk.Button(
 				master = split_frame, text = 'X', width = 1, height = 1, 
@@ -68,7 +71,12 @@ class TimingTab():
 			split_entry_car_number = tk.Entry(master = split_frame, width = 5, font = self.ui.split_font)
 			split_entry_car_number.insert(0, split.car_number)
 			split.car_number_form = split_entry_car_number
-			split_entry_car_number.pack()
+			split_entry_car_number.pack(side = tk.LEFT)
+
+			# Lap times if there is one
+			if split.lap_time != -1:
+				split_label_lap_time = tk.Label(master = split_frame, text = self.ui.format_time_string(split.lap_time))
+				split_label_lap_time.pack(side = tk.LEFT)
 
 		# Manual button
 		add_split_button = tk.Button(text = 'Add Split', master = self.frame_splits, width = 25, height = 4, command = self.ui.sessions[-1].add_split)
