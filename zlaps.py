@@ -9,6 +9,7 @@ import socket
 from lib.ui import UI
 from lib.stopwatch import StopWatch
 from lib.listener import Listener
+from lib.file_handler import FileHandler
 
 class zlaps():
 
@@ -19,6 +20,7 @@ class zlaps():
 		self.sessions = []
 		self.ui = UI(self.window, self.stopwatch, self.sessions)
 		self.listener = Listener(self.ui)
+		FileHandler().load_saved_sessions(self.ui)
 
 		# Threaded classes
 		listener_thread = Thread(target=self.listener.listen, daemon=True)

@@ -10,9 +10,13 @@ class Session():
 		self.ui = ui
 		self.splits = []
 
-	def add_split(self):
-		self.splits.append(self.Split(self.stopwatch.get_duration()))
-		self.ui.current_tab.draw_splits()
+	def add_split(self, split_time = None, car_number = ''):
+
+		if split_time is not None:
+			self.splits.append(self.Split(split_time, car_number = car_number))
+		else:
+			self.splits.append(self.Split(self.stopwatch.get_duration()))
+			self.ui.current_tab.draw_splits()
 
 	def remove_split(self, split):
 		self.splits.remove(split)
@@ -43,8 +47,8 @@ class Session():
 
 	class Split():
 
-		def __init__(self, split_time):
+		def __init__(self, split_time, car_number = ''):
 			self.lap_time = -1
 			self.split_time = split_time
 			self.car_number_form = None
-			self.car_number = ''
+			self.car_number = car_number
