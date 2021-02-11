@@ -6,6 +6,7 @@ from datetime import datetime
 from lib.stopwatch import StopWatch
 from lib.session import Session
 from lib.tabs.timing import TimingTab
+from lib.tabs.sessions import SessionsTab
 from lib.file_handler import FileHandler
 
 class UI():
@@ -66,7 +67,7 @@ class UI():
 		tab_names = [
 			('Timing', self.set_timing_tab),
 			('Cars', self.set_cars_tab),
-			('Results', self.set_results_tab),
+			('Sessions', self.set_sessions_tab),
 			('Settings', self.set_settings_tab)
 		]
 		tab_bar_button_presets = {'width': 10, 'height': 3}
@@ -96,9 +97,9 @@ class UI():
 		self.current_tab = 'cars'
 		self.clear_tab_content()
 
-	def set_results_tab(self):
-		self.current_tab = 'results'
+	def set_sessions_tab(self):
 		self.clear_tab_content()
+		self.current_tab = SessionsTab(self)
 
 	def set_settings_tab(self):
 		self.current_tab = 'settings'

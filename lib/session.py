@@ -22,16 +22,20 @@ class Session():
 		self.splits.remove(split)
 		self.ui.current_tab.draw_splits()
 
-	def calculate_laps(self):
+	# Make a list of unqiue car numbers in this session
+	def car_list(self):
 
-		# First make a list of unqiue cars
 		car_numbers = []
 		for split in self.splits:
 			if split.car_number != '' and split.car_number not in car_numbers:
 				car_numbers.append(split.car_number)
 
+		return car_numbers
+
+	def calculate_laps(self):
+
 		# Itterate over each unique car
-		for car_number in car_numbers:
+		for car_number in self.car_list():
 
 			# Find all the splits for this car
 			car_splits = []
@@ -44,6 +48,20 @@ class Session():
 				if index == 0:
 					continue
 				split.lap_time = split.split_time - car_splits[index - 1].split_time
+
+	# Return a dict of each cars laps
+	def get_laps(self):
+
+		laps_dict = dict()
+		for split in self.splits:
+			if split.lap_time != -1 and split.car_number is not '':
+
+				if split.car_number not in laps_dict.keys():
+					laps_dict[split.car_number] = []
+					
+				laps_dict[split.car_number].append(split.lap_time)
+
+		return laps_dict
 
 	class Split():
 
