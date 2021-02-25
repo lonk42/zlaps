@@ -2,6 +2,7 @@ from machine import UART, freq
 import uasyncio as asyncio
 import binascii
 import network
+import webrepl
 import usocket
 import utime
 
@@ -11,6 +12,22 @@ class LapTimer():
 
 		# Initalize
 		freq(240000000)
+
+		# Network
+		ap = network.WLAN(network.AP_IF)
+		ap.active(True)
+		ap.config(essid='zlaps_sensor')
+		ap.config(authmode=3, password='zlaps_sensor_123')
+
+		while ap.active() == False:
+		  print('Waiting for connection...')
+
+		print('Connection successful')
+		print(ap.ifconfig())
+
+		webrepl.start()
+
+		# LapTimer
 		self.uart = UART(2, 115200)
 		self.uart.init(115200, bits = 8, parity = None, stop = 1)
 		self.distance = 0
@@ -23,9 +40,7 @@ class LapTimer():
 		self.trigger_lockout = False
 
 		# Sockets
-		network_station = network.WLAN(network.STA_IF)
-#		network_ap = network.WLAN(network.AP_IF)
-		self.ip_address = network_station.ifconfig()[0]
+		self.ip_address = ap.ifconfig()[0]
 		self.listening_socket = usocket.socket(usocket.AF_INET, usocket.SOCK_DGRAM)
 		self.listening_socket.bind(usocket.getaddrinfo(self.ip_address, 3500)[0][-1])
 		self.listening_socket.settimeout(0)

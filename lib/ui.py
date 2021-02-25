@@ -21,7 +21,7 @@ class UI():
 		self.sessions = sessions
 		self.session_count = 0
 		self.current_tab = ''
-		self.sensor_ip = '10.1.1.145'
+		self.sensor_ip = '192.168.4.1'
 
 		# Fonts
 		self.title_font = tk.font.Font(family = 'Helvetica', name = 'title_font', size = 24)
