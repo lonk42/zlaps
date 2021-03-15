@@ -72,6 +72,7 @@ class TimingTab():
 			split_entry_car_number.insert(0, split.car_number)
 			split.car_number_form = split_entry_car_number
 			split_entry_car_number.pack(side = tk.LEFT)
+			last_entry = split_entry_car_number
 
 			# Lap times if there is one
 			if split.lap_time != -1:
@@ -90,5 +91,11 @@ class TimingTab():
 
 		self.canvas_splits.pack(fill = tk.BOTH, expand = True, side = tk.LEFT)
 		self.scroll_y_splits.pack(fill = tk.Y, side = tk.RIGHT)
+		self.canvas_splits.yview_moveto('1.0')
+
+		try:
+			last_entry.focus_set()
+		except:
+			pass
 
 

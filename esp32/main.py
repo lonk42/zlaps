@@ -36,7 +36,7 @@ class LapTimer():
 		loop = asyncio.get_event_loop()
 
 		# Setings
-		self.trigger_distance = 140
+		self.trigger_distance = 2200
 		self.trigger_lockout = False
 
 		# Sockets
