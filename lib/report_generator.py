@@ -21,13 +21,13 @@ class ReportGenerator():
 		pdf.set_font('Arial','',10.0) 
 		pdf_width = 210
 		pdf_height = 297
-		table_width = 95
-		table_cell_height = 5
+		table_width = 180
+		table_cell_height = 7
 
 		# Title
-		pdf.set_font('Arial','B',14.0) 
-		pdf.cell(pdf_width, 0.0, str(datetime.now()), align='C')
-		pdf.set_font('Arial','',10.0) 
+		pdf.set_font('Arial','B',25.0) 
+		pdf.cell(pdf_width, 0.0, 'Z Club NZ - ' + str(datetime.now().strftime("%Y-%m-%d %H:%M")), align='C')
+		pdf.set_font('Arial','',14.0) 
 		pdf.ln(10)
 
 		# Sessions
@@ -54,15 +54,15 @@ class ReportGenerator():
 				for car_number in lap_times.keys():
 					try:
 						if session.best_laps[car_number] == lap_number:
-							pdf.set_font('Arial','B',10.0)
+							pdf.set_font('Arial','B',14.0)
 						pdf.cell(table_width / len(lap_times.keys()), table_cell_height, str(self.format_time_string(lap_times[car_number][lap_number])), border = 1)
-						pdf.set_font('Arial','',10.0)
+						pdf.set_font('Arial','',14.0)
 					except:
 						pdf.cell(table_width / len(lap_times.keys()), table_cell_height, "", border = 1)
 
 				pdf.ln(table_cell_height)
 
-			pdf.ln(table_cell_height*2)
+			pdf.ln(table_cell_height)
 
 		pdf.output(file_path, 'F')
 
