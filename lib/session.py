@@ -9,6 +9,7 @@ class Session():
 		self.stopwatch = stopwatch
 		self.ui = ui
 		self.splits = []
+		self.best_laps = dict()
 
 	def add_split(self, split_time = None, car_number = ''):
 
@@ -60,6 +61,16 @@ class Session():
 					laps_dict[split.car_number] = []
 					
 				laps_dict[split.car_number].append(split.lap_time)
+
+				# See if its our best lap
+				if self.best_laps.get(split.car_number) is None:
+					self.best_laps[split.car_number] = 0
+
+				try:
+					if split.lap_time < laps_dict[split.car_number][self.best_laps[split.car_number]]:
+						self.best_laps[split.car_number] = len(laps_dict[split.car_number]) - 1
+				except:
+					pass
 
 		return laps_dict
 

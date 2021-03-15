@@ -53,7 +53,10 @@ class ReportGenerator():
 			for lap_number in range(0, max_laps):
 				for car_number in lap_times.keys():
 					try:
+						if session.best_laps[car_number] == lap_number:
+							pdf.set_font('Arial','B',10.0)
 						pdf.cell(table_width / len(lap_times.keys()), table_cell_height, str(self.format_time_string(lap_times[car_number][lap_number])), border = 1)
+						pdf.set_font('Arial','',10.0)
 					except:
 						pdf.cell(table_width / len(lap_times.keys()), table_cell_height, "", border = 1)
 
