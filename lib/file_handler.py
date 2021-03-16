@@ -15,7 +15,7 @@ class FileHandler():
 	def load_saved_sessions(self, ui):
 
 		# Check all files in the session dir
-		for session_file in os.listdir(self.session_directory):
+		for session_file in sorted(os.listdir(self.session_directory)):
 
 			# Skip any non csv
 			if not re.match('.*\.csv$', session_file):

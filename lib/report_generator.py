@@ -21,12 +21,17 @@ class ReportGenerator():
 		pdf.set_font('Arial','',10.0) 
 		pdf_width = 210
 		pdf_height = 297
-		table_width = 180
+		pdf_usable_width = pdf_width - 20
+
+		table_width = pdf_usable_width
 		table_cell_height = 7
+		logo_image = os.path.dirname(os.path.realpath(__file__)) + '/../assets/zclub_banner-3.png'
 
 		# Title
-		pdf.set_font('Arial','B',25.0) 
-		pdf.cell(pdf_width, 0.0, 'Z Club NZ - ' + str(datetime.now().strftime("%Y-%m-%d %H:%M")), align='C')
+		pdf.image(logo_image, x = (pdf_width/2) - 40, w = 80)
+		pdf.ln(10)
+		pdf.set_font('Arial','B',20.0)
+		pdf.cell(pdf_usable_width, 0, 'Z Club NZ - ' + str(datetime.now().strftime("%Y-%m-%d %H:%M")), align='C')
 		pdf.set_font('Arial','',14.0) 
 		pdf.ln(10)
 

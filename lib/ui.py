@@ -66,10 +66,11 @@ class UI():
 		# Tab bar
 		tab_names = [
 			('Timing', self.set_timing_tab),
-			('Cars', self.set_cars_tab),
 			('Sessions', self.set_sessions_tab),
-			('Settings', self.set_settings_tab)
 		]
+#			('Cars', self.set_cars_tab),
+#			('Settings', self.set_settings_tab)
+#		]
 		tab_bar_button_presets = {'width': 10, 'height': 3}
 		frame_tab_bar = tk.Frame(master = frame_top_bar)
 		frame_tab_bar.pack(side = tk.RIGHT, fill = tk.Y)
