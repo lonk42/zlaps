@@ -10,7 +10,8 @@ class FileHandler():
 
 	def __init__(self):
 		self.session_directory = os.path.dirname(os.path.realpath(__file__)) + '/../saved_sessions/'
-		#self.current_files os.listdir(self.session_directory)
+		if os.name == 'nt':
+			self.session_directory = self.session_directory.self.session_directory.replace('\\lib\\..').replace('/', '\\')
 
 	def load_saved_sessions(self, ui):
 
@@ -45,8 +46,7 @@ class FileHandler():
 		# Create file and write headers
 		file_path = self.session_directory + str(datetime.datetime.now()) + ' - ' + session.session_name + '.csv'
 		if os.name == 'nt':
-			file_path = self.session_directory.replace('\\lib\\..') + str(datetime.datetime.now()).replace(':', '') + ' - ' + session.session_name + '.csv'
-			file_path = file_path.replace('/', '\\')
+			file_path = file_path.replace(':', '')
 
 		session_file = open(file_path, 'w+')
 		session_file.write('"' + session.session_name + '","' + str(datetime.datetime.now()) + '"\n') 
