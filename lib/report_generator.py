@@ -11,8 +11,8 @@ class ReportGenerator():
 		self.report_directory = os.path.dirname(os.path.realpath(__file__)) + '/../reports/'
 		file_path = self.report_directory + str(datetime.now()) + ' - report.pdf'
 		if os.name == 'nt':
-			file_path = self.report_directory.replace('\\lib\\..') + str(datetime.now()).replace(':', '') + '-report.pdf'
-			file_path = file_path.replace('/', '\\')
+			self.report_directory = self.report_directory.replace('\\lib/..', '').replace('/', '\\')
+			file_path = self.report_directory + str(datetime.now()).replace(':', '-') + ' - report.pdf'
 
 		pdf = FPDF(orientation = 'P', unit = 'mm', format = 'A4')
 		pdf.add_page()
