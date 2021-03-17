@@ -11,7 +11,7 @@ class FileHandler():
 	def __init__(self):
 		self.session_directory = os.path.dirname(os.path.realpath(__file__)) + '/../saved_sessions/'
 		if os.name == 'nt':
-			self.session_directory = self.session_directory.self.session_directory.replace('\\lib\\..').replace('/', '\\')
+			self.session_directory = self.session_directory.replace('\\lib/..', '').replace('/', '\\')
 
 	def load_saved_sessions(self, ui):
 
