@@ -46,7 +46,7 @@ class FileHandler():
 		# Create file and write headers
 		file_path = self.session_directory + str(datetime.datetime.now()) + ' - ' + session.session_name + '.csv'
 		if os.name == 'nt':
-			file_path = file_path.replace(':', '')
+			file_path = file_path = self.session_directory + str(datetime.datetime.now()).replace(':', '') + ' - ' + session.session_name + '.csv'
 
 		session_file = open(file_path, 'w+')
 		session_file.write('"' + session.session_name + '","' + str(datetime.datetime.now()) + '"\n') 

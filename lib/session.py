@@ -55,7 +55,7 @@ class Session():
 
 		laps_dict = dict()
 		for split in self.splits:
-			if split.lap_time != -1 and split.car_number is not '':
+			if split.lap_time != -1 and split.car_number != '':
 
 				if split.car_number not in laps_dict.keys():
 					laps_dict[split.car_number] = []
